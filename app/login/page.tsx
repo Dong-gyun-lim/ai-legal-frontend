@@ -5,10 +5,11 @@ import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { loginUser } from '@/lib/api';
+import { toast } from 'sonner'; // ✅ 추가
 
 export default function LoginPage() {
     const [form, setForm] = useState({ email: '', password: '' });
-    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,15 +18,32 @@ export default function LoginPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setLoading(true);
+
         try {
+            // 🔹 로그인 API 호출
             await loginUser(form);
-            alert('로그인 성공!');
-            router.push('/');
+
+            // 🔹 유저 정보 저장
+            localStorage.setItem('user', JSON.stringify({ email: form.email }));
+
+            // ✅ 성공 토스트
+            toast.success('로그인 성공 🎉', {
+                description: '다시 오신 걸 환영합니다!',
+            });
+
+            // ✅ 라우터 이동 (약간의 지연으로 자연스러운 UX)
+            setTimeout(() => router.push('/'), 600);
         } catch (err) {
-            setError('로그인 실패');
+            console.error(err);
+
+            // ❌ 실패 토스트
+            toast.error('로그인 실패', {
+                description: '이메일 또는 비밀번호를 확인해주세요.',
+            });
+        } finally {
+            setLoading(false);
         }
-        localStorage.setItem('user', JSON.stringify({ email: form.email }));
-        router.push('/');
     };
 
     return (
@@ -42,6 +60,7 @@ export default function LoginPage() {
                         value={form.email}
                         onChange={handleChange}
                         required
+                        disabled={loading}
                     />
                     <Input
                         name="password"
@@ -50,10 +69,11 @@ export default function LoginPage() {
                         value={form.password}
                         onChange={handleChange}
                         required
+                        disabled={loading}
                     />
-                    {error && <p className="text-red-500 text-sm">{error}</p>}
-                    <Button type="submit" className="w-full">
-                        로그인
+
+                    <Button type="submit" className="w-full" disabled={loading}>
+                        {loading ? '로그인 중...' : '로그인'}
                     </Button>
                 </form>
 
@@ -65,7 +85,6 @@ export default function LoginPage() {
                         </a>
                     </p>
 
-                    {/* ✅ 추가된 영역 */}
                     <div className="flex gap-4 mt-2">
                         <a href="/find-id" className="text-slate-500 hover:text-slate-900 hover:underline">
                             아이디 찾기

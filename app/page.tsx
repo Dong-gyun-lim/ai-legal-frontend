@@ -19,7 +19,7 @@ type SimilarCase = {
 export default function Landing() {
     return (
         <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900">
-            <SiteNav />
+            {/* 🔹 전역 SiteNav는 app/layout.tsx 에서 렌더됩니다. 여기선 제거 */}
 
             {/* Hero */}
             <section className="relative overflow-hidden">
@@ -163,52 +163,7 @@ export default function Landing() {
     );
 }
 
-/* -------------------- 하단 구성요소 구현 -------------------- */
-
-function SiteNav() {
-    return (
-        <div className="sticky top-0 z-20 border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-            <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-                <div className="flex items-center gap-2">
-                    <div className="h-8 w-8 rounded-2xl bg-slate-900" />
-                    <span className="font-bold tracking-tight">DivorceInsight</span>
-                </div>
-                <nav className="hidden items-center gap-6 text-sm md:flex">
-                    <a className="hover:text-slate-900 text-slate-600" href="/">
-                        홈
-                    </a>
-                    <a className="hover:text-slate-900 text-slate-600" href="/intake">
-                        입력
-                    </a>
-                    <a className="hover:text-slate-900 text-slate-600" href="/analyze">
-                        분석
-                    </a>
-                    <a className="hover:text-slate-900 text-slate-600" href="/report">
-                        리포트
-                    </a>
-                </nav>
-                <div className="flex items-center gap-2">
-                    <Button asChild variant="outline" className="rounded-xl h-9 px-3">
-                        <a href="/login">로그인</a>
-                    </Button>
-                    <Button asChild className="rounded-xl h-9 px-3">
-                        <a href="/register">회원가입</a>
-                    </Button>
-                </div>
-                <div className="flex items-center gap-2">
-                    <Button asChild variant="outline" className="rounded-xl h-9 px-3 hidden md:inline-flex">
-                        <a href="/report">데모 보기</a>
-                    </Button>
-                    <Button asChild className="rounded-xl h-9 px-3">
-                        <a href="/intake" className="inline-flex items-center">
-                            시작하기 <ChevronRight className="ml-1 h-4 w-4" />
-                        </a>
-                    </Button>
-                </div>
-            </div>
-        </div>
-    );
-}
+/* -------------------- 하단 구성요소 -------------------- */
 
 interface StepCardProps {
     index: number;
@@ -286,14 +241,12 @@ function SimilarCasesList() {
     const [items, setItems] = useState<SimilarCase[]>([]);
     const [q, setQ] = useState('');
 
-    // 검색 이벤트 수신
     useEffect(() => {
         const handler = (e: any) => setQ(e.detail?.q ?? '');
         window.addEventListener('similar:search', handler as any);
         return () => window.removeEventListener('similar:search', handler as any);
     }, []);
 
-    // 로드 (백엔드 연동 시 API 호출로 교체)
     useEffect(() => {
         // TODO: fetch(`/api/cases/similar?q=${encodeURIComponent(q)}`)
         setItems([
