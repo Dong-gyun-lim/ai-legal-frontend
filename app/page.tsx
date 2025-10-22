@@ -21,7 +21,6 @@ export default function Landing() {
         <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900">
             {/* 🔹 전역 SiteNav는 app/layout.tsx 에서 렌더됩니다. 여기선 제거 */}
 
-            {/* Hero */}
             {/* Hero (배경이미지형) */}
             <section
                 className="relative h-[85vh] min-h-[560px] w-full overflow-hidden"

@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import SiteNav from '@/components/SiteNav'; // ✅ 네비게이션 import
-import { Toaster } from 'sonner'; // ✅ 추가
+import SiteNav from '@/components/SiteNav';
+import { Toaster } from 'sonner';
+import { ThemeProvider } from '@/components/theme-provider'; // ✅ 추가
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -25,13 +26,16 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="ko">
-            <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-slate-900`}>
-                {/* ✅ 전역 네비게이션 (모든 페이지 상단 고정) */}
-                <SiteNav />
-                {/* ✅ 페이지별 내용 */}
-                <main>{children}</main>
-                <Toaster richColors position="top-center" /> {/* ✅ 전역 토스트 */}
+        <html lang="ko" suppressHydrationWarning>
+            {/* ✅ ThemeProvider로 감싸기 */}
+            <body
+                className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors`}
+            >
+                <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} storageKey="di-theme">
+                    <SiteNav />
+                    <main>{children}</main>
+                    <Toaster richColors position="top-center" />
+                </ThemeProvider>
             </body>
         </html>
     );
