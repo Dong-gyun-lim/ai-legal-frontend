@@ -181,17 +181,25 @@ export default function SiteNav() {
                                     {/* 액션들 */}
                                     <div className="p-1">
                                         <button
-                                            onClick={() => handleNotReady('프로필')}
+                                            onClick={() => {
+                                                setOpen(false);
+                                                router.push('/profile'); // ✅ 프로필 페이지로 이동
+                                            }}
                                             className="w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-slate-50"
                                         >
                                             프로필
                                         </button>
+
                                         <button
-                                            onClick={() => handleNotReady('설정')}
+                                            onClick={() => {
+                                                setOpen(false);
+                                                router.push('/settings'); // ✅ 설정 페이지로 이동
+                                            }}
                                             className="w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-slate-50"
                                         >
                                             설정
                                         </button>
+
                                         <button
                                             onClick={handleLogout}
                                             className="w-full text-left px-3 py-2 rounded-lg text-sm text-rose-600 hover:bg-rose-50"

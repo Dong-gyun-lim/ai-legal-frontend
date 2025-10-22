@@ -22,69 +22,56 @@ export default function Landing() {
             {/* 🔹 전역 SiteNav는 app/layout.tsx 에서 렌더됩니다. 여기선 제거 */}
 
             {/* Hero */}
-            <section className="relative overflow-hidden">
-                <div className="absolute inset-0 -z-10 h-[520px] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-100 via-white to-white" />
-                <div className="mx-auto max-w-6xl px-5 py-16 md:py-24">
-                    <div className="grid items-center gap-10 md:grid-cols-2">
-                        <motion.div
-                            initial={{ opacity: 0, y: 16 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6 }}
-                        >
-                            <span className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm text-slate-600 bg-white shadow-sm">
-                                <Sparkles className="h-4 w-4" /> AI 기반 판례 유사도 분석
-                            </span>
-                            <h1 className="mt-4 text-3xl md:text-5xl font-extrabold leading-tight tracking-tight">
-                                이혼·양육 분쟁, <span className="text-slate-600">판례 기반</span>으로
-                                <span className="block">빠르게 흐름을 파악하세요</span>
-                            </h1>
-                            <p className="mt-4 text-base md:text-lg text-slate-600 leading-relaxed">
-                                사건 정보를 입력하면 유사한 판례를 찾아 유사도 게이지와 위자료·양육권 경향을
-                                시각화합니다. 본 서비스는 법률 자문을 대체하지 않으며 참고용 정보를 제공합니다.
-                            </p>
+            {/* Hero (배경이미지형) */}
+            <section
+                className="relative h-[85vh] min-h-[560px] w-full overflow-hidden"
+                style={{
+                    backgroundImage: "url('/images/hero-family.jpg')", // ← 네가 저장한 파일명으로 맞춰줘
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                }}
+            >
+                {/* 어두운 오버레이로 가독성 확보 */}
+                <div className="absolute inset-0 bg-black/50" />
 
-                            <div className="mt-6 flex flex-wrap items-center gap-3">
-                                <Button asChild className="rounded-2xl px-5 h-11 text-base shadow">
-                                    <a href="/intake" className="inline-flex items-center">
-                                        사건 입력 시작하기 <ChevronRight className="ml-1 h-4 w-4" />
-                                    </a>
-                                </Button>
-                                <Button variant="outline" asChild className="rounded-2xl px-5 h-11 text-base">
-                                    <a href="/report" className="inline-flex items-center">
-                                        샘플 리포트 보기
-                                    </a>
-                                </Button>
-                            </div>
+                <div className="relative z-10 mx-auto flex h-full max-w-6xl items-center px-5">
+                    <div className="max-w-2xl text-white">
+                        <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3 py-1 text-sm backdrop-blur">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path
+                                    d="M12 2l3 7h7l-5.5 4 2.5 7-7-4.5L5.5 20 8 13 2.5 9H9l3-7z"
+                                    stroke="currentColor"
+                                    strokeWidth="1.2"
+                                />
+                            </svg>
+                            판례 유사도 기반 상담
+                        </span>
 
-                            <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-slate-500">
-                                <span className="inline-flex items-center gap-2">
-                                    <ShieldCheck className="h-4 w-4" /> 개인정보는 안전하게 처리됩니다
-                                </span>
-                                <span className="hidden md:inline">·</span>
-                                <span>법률 자문이 아닌 참고형 안내</span>
-                            </div>
-                        </motion.div>
+                        <h1 className="mt-4 text-4xl font-bold leading-tight md:text-5xl">AI와 함께하는 이혼 상담</h1>
 
-                        <motion.div
-                            initial={{ opacity: 0, y: 24 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.1 }}
-                        >
-                            <Card className="rounded-2xl border-slate-200 shadow-lg">
-                                <CardHeader>
-                                    <CardTitle className="text-xl">분석 미리보기</CardTitle>
-                                    <CardDescription>유사도, 위자료 분포, 양육권 경향을 한눈에</CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="grid gap-4 md:grid-cols-2">
-                                        <MiniGauge label="유사도" value={78} />
-                                        <MiniGauge label="양육권 귀속 경향" value={62} />
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </motion.div>
+                        <p className="mt-4 text-lg text-white/90">
+                            위자료·양육권·재산분할 경향을 판례 데이터로 분석합니다.
+                        </p>
+
+                        <div className="mt-8 flex flex-wrap items-center gap-3">
+                            <a
+                                href="/intake"
+                                className="rounded-2xl bg-[#7B5E57] px-6 py-3 font-medium text-white transition hover:bg-[#6A4E48]"
+                            >
+                                지금 상담 시작하기
+                            </a>
+                            <a
+                                href="#how-it-works"
+                                className="rounded-2xl border border-white/30 bg-white/10 px-6 py-3 font-medium text-white/90 backdrop-blur transition hover:bg-white/20"
+                            >
+                                어떻게 동작하나요?
+                            </a>
+                        </div>
                     </div>
                 </div>
+
+                {/* 하단 그라데이션 블렌딩 (다음 섹션과 자연스럽게 연결) */}
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-white" />
             </section>
 
             {/* 3단계 이용 안내 */}
