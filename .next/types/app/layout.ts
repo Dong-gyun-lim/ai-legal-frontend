@@ -1,4 +1,4 @@
-// File: /Users/eiseu/Desktop/divorce-insight_patched/app/layout.tsx
+// File: /Users/eiseu/Downloads/divorce-insight_patched1/app/layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
