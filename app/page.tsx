@@ -6,6 +6,7 @@ import { Gavel, FileText, ChevronRight, ShieldCheck, BarChart3, Sparkles, Search
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
+import Link from 'next/link';
 
 type SimilarCase = {
     id: number;
@@ -25,17 +26,36 @@ export default function Landing() {
             <section
                 className="relative h-[85vh] min-h-[560px] w-full overflow-hidden"
                 style={{
-                    backgroundImage: "url('/images/hero-family.jpg')", // ← 네가 저장한 파일명으로 맞춰줘
+                    backgroundImage: "url('/images/hero-family.jpg')",
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                 }}
             >
-                {/* 어두운 오버레이로 가독성 확보 */}
+                {/* 어두운 오버레이 */}
                 <div className="absolute inset-0 bg-black/50" />
 
                 <div className="relative z-10 mx-auto flex h-full max-w-6xl items-center px-5">
-                    <div className="max-w-2xl text-white">
-                        <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3 py-1 text-sm backdrop-blur">
+                    {/* ✅ motion.div 전체 애니메이션 컨테이너 */}
+                    <motion.div
+                        initial="hidden"
+                        animate="visible"
+                        variants={{
+                            hidden: {},
+                            visible: {
+                                transition: { staggerChildren: 0.2 }, // 순차 등장
+                            },
+                        }}
+                        className="max-w-2xl text-white"
+                    >
+                        {/* 1️⃣ 태그 라벨 */}
+                        <motion.span
+                            variants={{
+                                hidden: { opacity: 0, y: 20 },
+                                visible: { opacity: 1, y: 0 },
+                            }}
+                            transition={{ duration: 0.6, ease: 'easeOut' }}
+                            className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3 py-1 text-sm backdrop-blur"
+                        >
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                                 <path
                                     d="M12 2l3 7h7l-5.5 4 2.5 7-7-4.5L5.5 20 8 13 2.5 9H9l3-7z"
@@ -44,29 +64,55 @@ export default function Landing() {
                                 />
                             </svg>
                             판례 유사도 기반 상담
-                        </span>
+                        </motion.span>
 
-                        <h1 className="mt-4 text-4xl font-bold leading-tight md:text-5xl">AI와 함께하는 이혼 상담</h1>
+                        {/* 2️⃣ 메인 헤드라인 */}
+                        <motion.h1
+                            variants={{
+                                hidden: { opacity: 0, y: 30 },
+                                visible: { opacity: 1, y: 0 },
+                            }}
+                            transition={{ duration: 0.8, ease: 'easeOut' }}
+                            className="mt-4 text-4xl font-bold leading-tight md:text-5xl"
+                        >
+                            AI와 함께하는 이혼 상담
+                        </motion.h1>
 
-                        <p className="mt-4 text-lg text-white/90">
+                        {/* 3️⃣ 설명 문구 */}
+                        <motion.p
+                            variants={{
+                                hidden: { opacity: 0, y: 30 },
+                                visible: { opacity: 1, y: 0 },
+                            }}
+                            transition={{ duration: 0.8, ease: 'easeOut' }}
+                            className="mt-4 text-lg text-white/90"
+                        >
                             위자료·양육권·재산분할 경향을 판례 데이터로 분석합니다.
-                        </p>
+                        </motion.p>
 
-                        <div className="mt-8 flex flex-wrap items-center gap-3">
+                        {/* 4️⃣ 버튼 그룹 */}
+                        <motion.div
+                            variants={{
+                                hidden: { opacity: 0, y: 20 },
+                                visible: { opacity: 1, y: 0 },
+                            }}
+                            transition={{ duration: 0.8, ease: 'easeOut' }}
+                            className="mt-8 flex flex-wrap items-center gap-3"
+                        >
                             <a
                                 href="/intake"
-                                className="rounded-2xl bg-[#7B5E57] px-6 py-3 font-medium text-white transition hover:bg-[#6A4E48]"
+                                className="rounded-2xl bg-[#7B5E57] px-6 py-3 font-medium text-white transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-[#6A4E48]"
                             >
                                 지금 상담 시작하기
                             </a>
-                            <a
-                                href="#how-it-works"
+                            <Link
+                                href="/help/main-flow"
                                 className="rounded-2xl border border-white/30 bg-white/10 px-6 py-3 font-medium text-white/90 backdrop-blur transition hover:bg-white/20"
                             >
                                 어떻게 동작하나요?
-                            </a>
-                        </div>
-                    </div>
+                            </Link>
+                        </motion.div>
+                    </motion.div>
                 </div>
 
                 {/* 하단 그라데이션 블렌딩 (다음 섹션과 자연스럽게 연결) */}
@@ -129,6 +175,10 @@ export default function Landing() {
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                         <div>
                             <div className="font-semibold">AI 이혼 분쟁 상담 플랫폼</div>
+                            <div className="mt-3 text-xs text-slate-500">
+                                데이터 출처: 대법원 사법정보시스템 공개 판례 <br />본 서비스는 법률 자문을 대체하지
+                                않습니다.
+                            </div>
                             <div className="mt-1">학습용·참고용 서비스 · 법률 자문 아님</div>
                         </div>
                         <div className="flex items-center gap-4">
@@ -160,7 +210,7 @@ interface StepCardProps {
 }
 function StepCard({ index, title, desc, icon, href }: StepCardProps) {
     return (
-        <Card className="rounded-2xl hover:shadow-md transition-shadow">
+        <Card className="rounded-2xl hover:shadow-lg hover:-translate-y-1 transition-transform duration-300">
             <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">

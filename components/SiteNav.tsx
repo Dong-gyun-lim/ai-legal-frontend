@@ -120,9 +120,6 @@ export default function SiteNav() {
                     >
                         리포트
                     </Link>
-                    <li>
-                        <Link href="/help/main-flow">이용 흐름</Link>
-                    </li>
 
                     {!user ? (
                         <>
