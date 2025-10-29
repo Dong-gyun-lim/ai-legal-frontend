@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BarChart3, Gavel, Scale, FileText } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function ReportPage() {
     const router = useRouter();
@@ -15,7 +16,7 @@ export default function ReportPage() {
         // ✅ 로그인 확인
         const storedUser = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
         if (!storedUser) {
-            alert('로그인이 필요합니다.');
+            toast.error('로그인이 필요합니다.');
             router.push('/login');
             return;
         }
@@ -27,7 +28,7 @@ export default function ReportPage() {
         const intake = intakeRaw ? JSON.parse(intakeRaw) : null;
 
         if (!intake) {
-            alert('입력된 사건 정보가 없습니다.');
+            toast.error('입력된 사건 정보가 없습니다.');
             router.push('/intake');
             return;
         }

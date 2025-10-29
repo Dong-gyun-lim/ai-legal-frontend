@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
 import { BarChart3, Gavel, Scale, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 /* ======================= 메인 페이지 ======================= */
 export default function AnalyzePage() {
@@ -16,7 +17,7 @@ export default function AnalyzePage() {
         // ✅ 로그인 상태 확인
         const storedUser = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
         if (!storedUser) {
-            alert('로그인이 필요합니다.');
+            toast.error('로그인이 필요합니다.');
             router.push('/login');
             return;
         }
@@ -26,7 +27,7 @@ export default function AnalyzePage() {
         const raw = sessionStorage.getItem('intakeForm');
         const intake = raw ? JSON.parse(raw) : null;
         if (!intake) {
-            alert('입력된 사건 정보가 없습니다. 먼저 정보를 입력해 주세요.');
+            toast.error('입력된 사건 정보가 없습니다. 먼저 정보를 입력해 주세요.');
             router.push('/intake');
             return;
         }

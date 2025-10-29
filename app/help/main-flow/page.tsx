@@ -112,11 +112,7 @@ export default function HelpMainFlowPage() {
                             계산하여, 가장 비슷한 사례들을 찾아내고 그 결과를 이해하기 쉬운 그래프와 수치로 보여줍니다.
                         </p>
                     </div>
-                    <img
-                        src="/images/help-analyze.png"
-                        alt="AI 분석 화면 예시"
-                        className="rounded-2xl border shadow-sm w-full max-w-md"
-                    />
+                    <ZoomableImage src="/images/help-analyze.png" alt="AI 분석 화면 예시" />
                 </motion.section>
 
                 {/* 3️⃣ 단계 - 리포트 */}
@@ -137,11 +133,7 @@ export default function HelpMainFlowPage() {
                             저장하거나 공유할 수도 있습니다.
                         </p>
                     </div>
-                    <img
-                        src="/images/help-report.png"
-                        alt="리포트 예시 화면"
-                        className="rounded-2xl border shadow-sm w-full max-w-md"
-                    />
+                    <ZoomableImage src="/images/help-report.png" alt="리포트 예시 화면" />
                 </motion.section>
             </div>
 

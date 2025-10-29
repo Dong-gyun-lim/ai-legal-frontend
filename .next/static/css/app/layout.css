@@ -523,9 +523,6 @@
   .max-h-\(--radix-select-content-available-height\) {
     max-height: var(--radix-select-content-available-height);
   }
-  .max-h-48 {
-    max-height: calc(var(--spacing) * 48);
-  }
   .max-h-\[90vh\] {
     max-height: 90vh;
   }
@@ -630,9 +627,6 @@
   .scroll-my-1 {
     scroll-margin-block: calc(var(--spacing) * 1);
   }
-  .list-disc {
-    list-style-type: disc;
-  }
   .auto-rows-min {
     grid-auto-rows: min-content;
   }
@@ -690,13 +684,6 @@
   .gap-10 {
     gap: calc(var(--spacing) * 10);
   }
-  .space-y-1 {
-    :where(& > :not(:last-child)) {
-      --tw-space-y-reverse: 0;
-      margin-block-start: calc(calc(var(--spacing) * 1) * var(--tw-space-y-reverse));
-      margin-block-end: calc(calc(var(--spacing) * 1) * calc(1 - var(--tw-space-y-reverse)));
-    }
-  }
   .space-y-2 {
     :where(& > :not(:last-child)) {
       --tw-space-y-reverse: 0;
@@ -730,13 +717,6 @@
       --tw-space-y-reverse: 0;
       margin-block-start: calc(calc(var(--spacing) * 8) * var(--tw-space-y-reverse));
       margin-block-end: calc(calc(var(--spacing) * 8) * calc(1 - var(--tw-space-y-reverse)));
-    }
-  }
-  .space-y-10 {
-    :where(& > :not(:last-child)) {
-      --tw-space-y-reverse: 0;
-      margin-block-start: calc(calc(var(--spacing) * 10) * var(--tw-space-y-reverse));
-      margin-block-end: calc(calc(var(--spacing) * 10) * calc(1 - var(--tw-space-y-reverse)));
     }
   }
   .space-y-20 {
@@ -1011,9 +991,6 @@
   }
   .pl-2 {
     padding-left: calc(var(--spacing) * 2);
-  }
-  .pl-5 {
-    padding-left: calc(var(--spacing) * 5);
   }
   .pl-9 {
     padding-left: calc(var(--spacing) * 9);
@@ -1928,14 +1905,6 @@
       background-color: var(--color-slate-900);
     }
   }
-  .dark\:bg-slate-900\/30 {
-    &:is(.dark *) {
-      background-color: color-mix(in srgb, oklch(20.8% 0.042 265.755) 30%, transparent);
-      @supports (color: color-mix(in lab, red, red)) {
-        background-color: color-mix(in oklab, var(--color-slate-900) 30%, transparent);
-      }
-    }
-  }
   .dark\:bg-slate-950 {
     &:is(.dark *) {
       background-color: var(--color-slate-950);
@@ -1949,11 +1918,6 @@
   .dark\:text-slate-200 {
     &:is(.dark *) {
       color: var(--color-slate-200);
-    }
-  }
-  .dark\:text-slate-300 {
-    &:is(.dark *) {
-      color: var(--color-slate-300);
     }
   }
   .dark\:text-slate-400 {
