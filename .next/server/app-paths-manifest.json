@@ -1,7 +1,6 @@
 {
-  "/report/page": "app/report/page.js",
-  "/login/page": "app/login/page.js",
-  "/find-id/page": "app/find-id/page.js",
-  "/register/page": "app/register/page.js",
-  "/page": "app/page.js"
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/page": "app/page.js",
+  "/intake/page": "app/intake/page.js",
+  "/analyze/page": "app/analyze/page.js"
 }

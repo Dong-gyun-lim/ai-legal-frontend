@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
-import { BarChart3, Gavel, Scale, ChevronRight } from 'lucide-react';
+import { BarChart3, Gavel, Scale } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
@@ -33,7 +33,7 @@ export default function AnalyzePage() {
         }
 
         // ✅ Mock 분석 결과 (나중에 백엔드 연결 예정)
-        setTimeout(() => {
+        const t = setTimeout(() => {
             setResult({
                 similarity: 83,
                 damages: 1800,
@@ -49,7 +49,9 @@ export default function AnalyzePage() {
                 ],
                 intake,
             });
-        }, 800);
+        }, 400);
+
+        return () => clearTimeout(t);
     }, [router]);
 
     if (!user) return null; // 로그인 안됐을 때 렌더 중단
@@ -77,8 +79,11 @@ export default function AnalyzePage() {
                     <StatCard icon={<Gavel className="h-6 w-6" />} label="양육권 귀속" value={result.custody} />
                 </div>
 
+                {/* ✅ NEW: AI 해석 요약 패널 (빨간 영역 채우기) */}
+                <InsightPanel />
+
                 {/* 근거 판례 */}
-                <Card>
+                <Card className="mt-8">
                     <CardHeader>
                         <CardTitle>근거 판례</CardTitle>
                         <CardDescription>가장 유사한 판례 목록 (Top-2)</CardDescription>
@@ -111,6 +116,135 @@ export default function AnalyzePage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+/* ======================= NEW: AI 해석 요약 패널 ======================= */
+
+const AI_URL = process.env.NEXT_PUBLIC_AI_URL || 'http://localhost:5001';
+
+type IntakeForm = {
+    title?: string;
+    reason?: string;
+    summary?: string;
+    gender?: 'male' | 'female' | '';
+    ageRange?: '20s' | '30s' | '40s' | '50plus' | '';
+    marriageYears?: number;
+    childCount?: number;
+    reasons?: string[];
+    otherReason?: string;
+    role?: 'victim' | 'perpetrator' | 'both' | '';
+    claimDamages?: boolean;
+    claimCustody?: boolean; // 자녀 0이면 없을 수 있음
+    incidentYear?: string;
+    wantWinProbability?: boolean;
+};
+
+function InsightPanel() {
+    const [intake, setIntake] = useState<IntakeForm | null>(null);
+    const [text, setText] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
+    const [err, setErr] = useState<string>('');
+
+    // 세션에서 intakeForm 복원
+    useEffect(() => {
+        try {
+            const raw = sessionStorage.getItem('intakeForm');
+            if (raw) setIntake(JSON.parse(raw));
+        } catch {
+            /* noop */
+        }
+    }, []);
+
+    // 프롬프트 생성 (입력값 요약)
+    const question = useMemo(() => {
+        if (!intake) return '';
+        const meta = [
+            intake.gender ? `성별=${intake.gender}` : '',
+            intake.ageRange ? `나이대=${intake.ageRange}` : '',
+            Number.isFinite(intake.marriageYears) ? `혼인기간=${intake.marriageYears}년` : '',
+            Number.isFinite(intake.childCount) ? `자녀수=${intake.childCount}` : '',
+            intake.incidentYear ? `사건연도=${intake.incidentYear}` : '',
+            intake.role ? `역할=${intake.role}` : '',
+            intake.claimDamages ? '위자료청구=예' : '위자료청구=아니오',
+            typeof intake.claimCustody === 'boolean' ? `양육권청구=${intake.claimCustody ? '예' : '아니오'}` : '',
+            intake.reasons?.length ? `사유태그=${intake.reasons.join(',')}` : '',
+            intake.otherReason ? `기타=${intake.otherReason}` : '',
+            intake.wantWinProbability ? '승소여부예측=요청' : '승소여부예측=미요청',
+        ]
+            .filter(Boolean)
+            .join(' | ');
+
+        return [
+            '사용자 입력을 바탕으로 한국어로 간단·보수적으로 사건 해석 요약을 작성하세요.',
+            '1) 위자료/양육/재산분할 경향 (근거 2~4개)',
+            intake.wantWinProbability ? '2) 승소 가능성 관점(확률 수치 금지, 표현 절제)' : '',
+            '3) 유의 쟁점 2가지',
+            '4) 본 서비스는 법률 자문이 아님을 한 줄로 고지',
+            '',
+            `메타: ${meta}`,
+            '',
+            '응답 형식:',
+            '- 요약 한 문장',
+            '- 근거 포인트',
+            intake.wantWinProbability ? '- 승소 가능성 관점' : '',
+            '- 유의 쟁점',
+            '- 한줄 고지',
+        ]
+            .filter(Boolean)
+            .join('\n');
+    }, [intake]);
+
+    // AI 호출
+    useEffect(() => {
+        let ignore = false;
+        const run = async () => {
+            if (!question) return;
+            setLoading(true);
+            setErr('');
+            try {
+                const res = await fetch(`${AI_URL}/rag`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question, top_k: 5 }),
+                });
+                if (!res.ok) throw new Error(`AI 서버 오류 (${res.status})`);
+                const data = await res.json();
+                if (!ignore) setText(String(data?.answer || '').trim());
+            } catch (e: any) {
+                if (!ignore) setErr(e?.message || 'AI 분석 중 문제가 발생했습니다.');
+            } finally {
+                if (!ignore) setLoading(false);
+            }
+        };
+        run();
+        return () => {
+            ignore = true;
+        };
+    }, [question]);
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>AI 해석 요약</CardTitle>
+                <CardDescription>입력한 사건 정보를 바탕으로 자동 생성된 요약입니다.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                {loading && (
+                    <div className="space-y-2 text-sm text-slate-500">
+                        <div className="h-4 w-1/3 bg-slate-200 animate-pulse rounded" />
+                        <div className="h-4 w-5/6 bg-slate-200 animate-pulse rounded" />
+                        <div className="h-4 w-2/3 bg-slate-200 animate-pulse rounded" />
+                    </div>
+                )}
+                {!loading && err && <p className="text-sm text-red-600">⚠️ {err}</p>}
+                {!loading && !err && (
+                    <div className="prose prose-slate max-w-none text-sm whitespace-pre-wrap leading-7">
+                        {text || '아직 생성된 요약이 없습니다.'}
+                    </div>
+                )}
+            </CardContent>
+        </Card>
     );
 }
 
