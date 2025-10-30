@@ -100,7 +100,7 @@ export default function Landing() {
                             className="mt-8 flex flex-wrap items-center gap-3"
                         >
                             <a
-                                href="/intake"
+                                href="/intake/basic"
                                 className="rounded-2xl bg-[#7B5E57] px-6 py-3 font-medium text-white transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-[#6A4E48]"
                             >
                                 지금 상담 시작하기
@@ -127,7 +127,7 @@ export default function Landing() {
                         <p className="mt-2 text-slate-600">입력 → 분석 → 리포트. 간단한 3단계로 결과를 확인하세요.</p>
                     </div>
                     <Button asChild className="rounded-2xl h-10 px-4">
-                        <a href="/intake">지금 시작</a>
+                        <a href="/intake/basic">지금 시작</a>
                     </Button>
                 </div>
 
@@ -137,7 +137,7 @@ export default function Landing() {
                         title="사건 정보 입력"
                         desc="기본 정보와 사건 요약을 입력하면 AI가 정규화합니다."
                         icon={<Gavel className="h-6 w-6" />}
-                        href="/intake"
+                        href="/intake/basic"
                     />
                     <StepCard
                         index={2}
@@ -182,7 +182,7 @@ export default function Landing() {
                             <div className="mt-1">학습용·참고용 서비스 · 법률 자문 아님</div>
                         </div>
                         <div className="flex items-center gap-4">
-                            <a className="hover:underline" href="/intake">
+                            <a className="hover:underline" href="/intake/basic">
                                 시작하기
                             </a>
                             <a className="hover:underline" href="/analyze">

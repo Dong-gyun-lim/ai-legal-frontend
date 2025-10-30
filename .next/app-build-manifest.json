@@ -11,15 +11,20 @@
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
-    "/intake/page": [
+    "/intake/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/intake/page.js"
+      "static/chunks/app/intake/layout.js"
     ],
-    "/analyze/page": [
+    "/intake/basic/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/analyze/page.js"
+      "static/chunks/app/intake/basic/page.js"
+    ],
+    "/intake/detail/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/intake/detail/page.js"
     ]
   }
 }
